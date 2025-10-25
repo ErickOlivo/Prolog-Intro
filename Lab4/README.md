@@ -13,7 +13,7 @@ swipl
 true.
 ````
 
-## Results of PART 1 - Test with queries like:
+## Results of PART 1 and PART 2 - Test with queries like:
 These queries test the basic `can_move/2` reasoning rule to confirm our facts (edge/2, blocked/2) and logic are correct.
 
 ```prolog
