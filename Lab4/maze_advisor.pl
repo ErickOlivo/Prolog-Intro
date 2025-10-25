@@ -64,7 +64,7 @@ find_path(X, Y, Path) :-
 
 
 
-% PART 5: EXTENSIONS (Optional)
+% PART 5 - Extensions (Optional)
 
 % 5.1: Path Preference (e.g., prefer left paths)
 
@@ -118,3 +118,17 @@ move_steps(X, Y, Visited, Path, StepsIn, StepsOut) :-
     format('Exploring from ~w to ~w...~n', [X, Z]),
     StepsNew is StepsIn + 1, % Increment step count
     move_steps(Z, Y, [Z|Visited], Path, StepsNew, StepsOut).
+
+
+
+%  Implementation Summary
+
+% Reasoning was implemented using Prolog's built-in logical rules and recursion.
+% The system's knowledge is defined by 'edge/2' facts (paths) and 'blocked/2'
+% facts (obstacles). The core reasoning logic is in 'can_move/2', which
+% infers a valid move by checking if a path exists and is NOT blocked.
+% The 'move/4' predicate uses this rule to recursively traverse the graph,
+% printing its reasoning with 'format/2', while a 'Visited'
+% list prevents infinite loops. This was extended with a 'why/2'
+% predicate to explicitly query the reason for a move and 'move_steps/6'
+% to track performance by counting steps.
