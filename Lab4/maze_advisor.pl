@@ -14,6 +14,7 @@ edge(c, b).
 blocked(a, c). % Door is blocked from a to c
 
 
+
 % PART 2 - Reasoning Rules
 
 % We can move from X to Y if an 'edge' from X to Y exists AND (,) it is NOT (\+) blocked.
@@ -34,8 +35,8 @@ reason(_X, Y, 'destination reached') :-
     Y == exit.
 
 
-% PART 3 - Recursive Traversal
 
+% PART 3 - Recursive Traversal
 
 % move(Current, Destination, Visited, FinalPath)
 
@@ -52,4 +53,16 @@ move(X, Y, Visited, Path) :-
     \+ member(Z, Visited),                              % 2. And we have not visited Z before (prevents loops)
     format('Exploring from ~w to ~w...~n', [X, Z]),     % 3. Print the exploration
     move(Z, Y, [Z|Visited], Path).                      % 4. Recursively search from Z to Y
+
+
+
+% PART 4: Putting It All Together
+
+find_path(X, Y, Path) :-
+    move(X, Y, [X], RevPath),                           % Call move, starting with X in the visited list
+    reverse(RevPath, Path).                             % Reverse the path for the correct order
+
+
+
+
 
