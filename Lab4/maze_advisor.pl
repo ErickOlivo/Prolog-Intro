@@ -65,4 +65,12 @@ find_path(X, Y, Path) :-
 
 
 
+% IMPLEMENTATION SUMMARY
 
+% Reasoning was implemented using Prolog's built-in logical rules and recursion.
+% The system's knowledge is defined by 'edge/2' facts (paths) and 'blocked/2'
+% facts (obstacles). The core reasoning logic is in 'can_move/2', which
+% infers a valid move by checking if a path exists and is NOT blocked.
+% The 'move/4' predicate uses this rule to recursively traverse the graph,
+% printing its reasoning with 'format/2' at each step, while a 'Visited'
+% list prevents infinite loops.
