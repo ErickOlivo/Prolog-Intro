@@ -64,13 +64,57 @@ find_path(X, Y, Path) :-
 
 
 
+% PART 5: EXTENSIONS (Optional)
 
-% IMPLEMENTATION SUMMARY
+% 5.1: Path Preference (e.g., prefer left paths)
 
-% Reasoning was implemented using Prolog's built-in logical rules and recursion.
-% The system's knowledge is defined by 'edge/2' facts (paths) and 'blocked/2'
-% facts (obstacles). The core reasoning logic is in 'can_move/2', which
-% infers a valid move by checking if a path exists and is NOT blocked.
-% The 'move/4' predicate uses this rule to recursively traverse the graph,
-% printing its reasoning with 'format/2' at each step, while a 'Visited'
-% list prevents infinite loops.
+% This is implemented implicitly by Prolog's top-down search.
+% In PART 1, 'edge(a, b).' is defined BEFORE 'edge(a, c).'.
+% Therefore, the 'move/4' predicate will always try to move to 'b'
+% before it tries to move to 'c'.
+
+
+% 5.2: why(X, Y) Predicate
+
+
+% Case 1: A specific reason (open, blocked, reached) is found.
+why(X, Y) :-
+    reason(X, Y, Reason), !,                            % The '!' stops Prolog from looking for other rules.
+    format('Reason for ~w -> ~w: ~w.~n', [X, Y, Reason]).
+
+% Case 2: No edge exists at all.
+why(X, Y) :-
+    \+ edge(X, Y), !,
+    format('Reason for ~w -> ~w: No path exists.~n', [X, Y]).
+
+% Case 3: Edge exists but has no other reason.
+why(X, Y) :-
+    format('Reason for ~w -> ~w: Path exists but is not currently viable.~n', [X, Y]).
+
+
+% 5.3: Performance Tracking (Steps)
+
+% find_path_steps(Start, End, Path, Steps)
+find_path_steps(X, Y, Path, Steps) :-
+    move_steps(X, Y, [X], RevPath, 0, Steps),           % Start count at 0
+    reverse(RevPath, Path),
+    format('~n Total steps taken: ~w~n', [Steps]).
+
+% move_steps(Current, Dest, Visited, Path, StepsIn, StepsOut)
+
+% Base Case: Arrived. (Counts as the final step)
+
+move_steps(X, Y, Visited, [Y|Visited], StepsIn, StepsOut) :-
+    can_move(X, Y),
+    format('Moving from ~w to ~w.~n', [X, Y]),
+    StepsOut is StepsIn + 1.                            % Final step
+
+
+% Recursive Case: Exploring.
+
+move_steps(X, Y, Visited, Path, StepsIn, StepsOut) :-
+    can_move(X, Z),
+    \+ member(Z, Visited),
+    format('Exploring from ~w to ~w...~n', [X, Z]),
+    StepsNew is StepsIn + 1, % Increment step count
+    move_steps(Z, Y, [Z|Visited], Path, StepsNew, StepsOut).
