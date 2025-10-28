@@ -2,7 +2,7 @@
 
 
 % Base Code for Sudoku Solver
-:- use_module(libary(clpfd)).
+:- use_module(library(clpfd)).
 
 sudoku(Rows) :-
     append(Rows, Vars), Vars ins 1..9,
@@ -29,20 +29,48 @@ blocks3([A1,A2,A3|R1], [B1,B2,B3|R2], [C1,C2,C3|R3]) :-
 
 % Example Puzzle
 
-Puzzle = [
-    [5,3,_,_,7,_,_,_,_],
-    [6,_,_,1,9,5,_,_,_],
-    [_,9,8,_,_,_,_,6,_],
-    [8,_,_,_,6,_,_,_,3],
-    [4,_,_,8,_,3,_,_,1],
-    [7,_,_,_,2,_,_,_,6],
-    [_,6,_,_,_,_,2,8,_],
-    [_,_,_,4,1,9,_,_,5],
-    [_,_,_,_,8,_,_,7,9]
-].
+% Defines the puzzle board as a Prolog fact.
+% Using a fact makes the code easier to test with different boards.
+% e.g. ?- puzzle(Puzzle), sudoku(Puzzle), maplist(writeln, Puzzle).
+
+
+puzzle([
+    [5,3,_, _,7,_, _,_,_],
+    [6,_,_, 1,9,5, _,_,_],
+    [_,9,8, _,_,_, _,6,_],
+    [8,_,_, _,6,_, _,_,3],
+    [4,_,_, 8,_,3, _,_,1],
+    [7,_,_, _,2,_, _,_,6],
+    [_,6,_, _,_,_, 2,8,_],
+    [_,_,_, 4,1,9, _,_,5],
+    [_,_,_, _,8,_, _,7,9]
+]).
+
+
+% A famously difficult puzzle, called "Al Escargot".
+
+% e.g. ?- puzzle_hard(Puzzle), sudoku(Puzzle), maplist(writeln, Puzzle).
+
+puzzle_hard([
+    [_,_,_, _,_,_, _,_,_],
+    [_,_,_, _,_,3, _,8,5],
+    [_,_,1, _,2,_, _,_,_],
+    [_,_,_, 5,_,7, _,_,_],
+    [_,_,4, _,_,_, 1,_,_],
+    [_,9,_, _,_,_, _,_,_],
+    [5,_,_, _,_,_, _,7,3],
+    [_,_,2, _,1,_, _,_,_],
+    [_,_,_, _,4,_, _,_,9]
+]).
 
 % Helper predicate to solve and print
+% A simple predicate to run the default puzzle.
+% Query: ?- solve.
+
 solve :-
     puzzle(Rows),
     sudoku(Rows),
+    write('Solution: '), nl,
     maplist(writeln, Rows).
+
+
