@@ -17,17 +17,20 @@ sudoku(Rows) :-
 
 % Defining 3x3 Block Constrains
 
+% Base case
 blocks([]).
 blocks([A,B,C|Rest]) :-
     blocks3(A, B, C),
     blocks(Rest).
 
+% Recursive case
 blocks3([], [], []).
 blocks3([A1,A2,A3|R1], [B1,B2,B3|R2], [C1,C2,C3|R3]) :-
+    % Apply 'all_different' to the 9 cells of the first 3x3 block
     all_different([A1,A2,A3,B1,B2,B3,C1,C2,C3]),
     blocks3(R1, R2, R3).
 
-% Example Puzzle
+% Example Puzzles Definitions
 
 % Defines the puzzle board as a Prolog fact.
 % Using a fact makes the code easier to test with different boards.
@@ -48,7 +51,6 @@ puzzle([
 
 
 % A famously difficult puzzle, called "Al Escargot".
-
 % e.g. ?- puzzle_hard(Puzzle), sudoku(Puzzle), maplist(writeln, Puzzle).
 
 puzzle_hard([
