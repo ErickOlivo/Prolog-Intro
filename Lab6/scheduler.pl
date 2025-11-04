@@ -14,8 +14,8 @@ print_schedule([task(Name,Dur,Res)|T], [S|Ss], [E|Es]) :-
     format('Task ~w (Res ~w, Dur ~w):   Start: ~w, End: ~w~n', [Name, Res, Dur, S, E]),
     print_schedule(T, Ss, Es).
 
-    
-schedule(Starts, Ends, Makespan) :-
+
+schedule([Tasks, Starts, Ends, Makespan]) :-
     Tasks = [task(a,3,1), task(b,2,1), task(c,4,2)],
     Starts = [Sa, Sb, Sc], Ends = [Ea, Eb, Ec],
 
@@ -29,7 +29,8 @@ schedule(Starts, Ends, Makespan) :-
 
     % Non-overlap constraints
     % task(StartTime, Duration, EndTime, ResourceID, _)
-    disjoint1([task(Sa,3,Ea,1,_), task(Sb,2,Eb,1,_)]),
+    % disjoint2([task(Sa,3,Ea,1,_), task(Sb,2,Eb,1,_)]),
+    (Ea #=< Sb) #\/ (Eb #=< Sa),
 
     % Precedence COnstraints
     Ea #=< Sb,
