@@ -1,34 +1,38 @@
 :- use_module(library(clpfd)).
 
+solve :-
+    schedule(ScheduleInfo),
 
+    format('~n--- Optimal Schedule Found ---~n'),
+    write(ScheduleInfo).
 
 schedule(Starts, Ends, Makespan) :-
+    Tasks = [task(a,3,1), task(b,2,1), task(c,4,2)],
+    Starts = [Sa, Sb, Sc], Ends = [Ea, Eb, Ec],
 
-    Starts = [S1, S2, S3], Ends = [E1, E2, E3],
+    % Temporal Constraints
     Starts ins 0..10,
 
-    % 1. Restricción de Duración (End #= Start + Duration)
-    E1#= S1+ 3,
-    E2 #= S2 + 2,
-    E3 #= S3 + 4,
+    % The basic constraint: End #= Start + Duration
+    Ea #= Sa+ 3,
+    Eb #= Sb + 2,
+    Ec #= Sc + 4,
 
-    S1 + 3  #=< S2,
-    E1#=< S3,
+    % Non-overlap constraints
+    % task(StartTime, Duration, EndTime, ResourceID, _)
+    disjoint1([task(Sa,3,Ea,1,_), task(Sb,2,Eb,1,_)]),
 
-    %labeling([min(Makespan)], Starts),
+    % Precedence COnstraints
+    Ea #=< Sb,
+
+    % Optimization
+    Makespan #= max(Ea, max(Eb, Ec)),
+
+    % Minimize the makespan
+    labeling([min(Makespan)], [Sa, Sb, Sc, Makespan]).
 
 
-    Tasks = [task(S1, 3, E1, 1, _), task(S2, 2, E2, 1, _), task(S3, 4, E3, 1, _)],
 
-    disjoint2(Tasks),
-    (E2 #=< S3) #\/ (E3 #=< S2),
-
-
-    %Makespan #= max(E1, max(E2, E3)),
-    maximum(Makespan, [E1, E2, E3]),
-    Makespan in 0..20,
-    % labeling/2
-    labeling([min(Makespan)], [S1, S2, S3, E1, E2, E3, Makespan]).
 
 
 
