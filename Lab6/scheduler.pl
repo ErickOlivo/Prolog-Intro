@@ -1,11 +1,20 @@
 :- use_module(library(clpfd)).
 
 solve :-
-    schedule(ScheduleInfo),
+    schedule([Tasks, Starts, Ends, Makespan]),
+
 
     format('~n--- Optimal Schedule Found ---~n'),
-    write(ScheduleInfo).
+    format('Total Project Time (Makespan): ~w~n', [Makespan]),
 
+    print_schedule(Tasks, Starts, Ends).
+
+print_schedule([], [], []).
+print_schedule([task(Name,Dur,Res)|T], [S|Ss], [E|Es]) :-
+    format('Task ~w (Res ~w, Dur ~w):   Start: ~w, End: ~w~n', [Name, Res, Dur, S, E]),
+    print_schedule(T, Ss, Es).
+
+    
 schedule(Starts, Ends, Makespan) :-
     Tasks = [task(a,3,1), task(b,2,1), task(c,4,2)],
     Starts = [Sa, Sb, Sc], Ends = [Ea, Eb, Ec],
