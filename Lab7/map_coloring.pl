@@ -45,7 +45,27 @@ solve_au(K) :-
     edges_au(Edges),
     map_color(K, Regions, Edges, Vars),
     color_names(ColorMap),
-    pretty_print(Regions, Vars, ColorMap).
+    pretty_print(Regions, Vars, ColorMap).S
 
 
 % PART B: South America
+
+regions_sa([ar, bo, br, cl, co, ec, gfr, gy, py, pe, su, uy, ve]).
+
+edges_sa([
+    ar-bo, ar-br, ar-cl, ar-py, ar-uy,
+    bo-br, bo-cl, bo-py, bo-pe,
+    br-co, br-gfr, br-gy, br-py, br-pe, br-su, br-uy, br-ve,
+    cl-pe,
+    co-ec, co-pe, co-ve,
+    ec-pe,
+    gfr-su,
+    gy-su, gy-ve
+]).
+
+solve_sa(K) :-
+    regions_sa(Regions),
+    edges_sa(Edges),
+    map_color(K, Regions, Edges, Vars),
+    color_names(ColorMap),
+    pretty_print(Regions, Vars, ColorMap).
