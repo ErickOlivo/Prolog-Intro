@@ -12,7 +12,7 @@ The core logic is in the `map_color/4` predicate, which:
 
 1.  **Load the program** in SWI-Prolog:
     ```prolog
-    ?- [map_color].
+    ?- [map_coloring].
     true.
     ```
 
