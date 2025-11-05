@@ -1,4 +1,4 @@
-:- use_module(library(clpfd))
+:- use_module(library(clpfd)).
 
 % PART A: Australia
 
@@ -7,7 +7,7 @@ regions_au([wa, nt, sa, q, nsw, v, t]).
 edges_au([
     wa-nt, wa-sa,
     nt-sa, nt-q,
-    sa-q, sa-nsw, sa-v
+    sa-q, sa-nsw, sa-v,
     q-nsw,
     nsw-v
 ]).
@@ -28,7 +28,7 @@ apply_constraints([R1-R2 | Rest], Regions, Vars) :-
     nth1(Idx2, Regions, R2),
     nth1(Idx2, Vars, C2),
     C1 #\= C2,
-    apply_constraints(Rest, Regions, Vars)
+    apply_constraints(Rest, Regions, Vars).
 
 pretty_print(Regions, Vars, ColorMap) :-
     format('~n Solution: ~n'),
@@ -37,7 +37,7 @@ pretty_print(Regions, Vars, ColorMap) :-
 pretty_color_by_region([], [], _).
 pretty_color_by_region([Region|Rs], [Var|Vs], ColorMap) :-
     member(Var-ColorName, ColorMap),
-    format('~w = ~w~n' [Region, ColorName]),
+    format('~w = ~w~n', [Region, ColorName]),
     pretty_color_by_region(Rs, Vs, ColorMap).
 
 solve_au(K) :-
