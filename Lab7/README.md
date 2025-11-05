@@ -1,51 +1,86 @@
-:- use_module(library(clpfd))
+# Prolog Lab 6: Map Coloring with CLPFD
 
-% PART A: Australia
+This lab uses Constraint Logic Programming over Finite Domains (CLPFD) to solve the map coloring problem. The goal is to assign a color to each region of a map such that no two adjacent regions share the same color.
 
-regions_au([wa, nt, sa, q, nsw, v, t]).
+The core logic is in the `map_color/4` predicate, which:
+1.  Takes a number of colors (K), a list of regions, and a list of edges (adjacencies).
+2.  Assigns a domain `1..K` to a variable for each region.
+3.  Applies the `C1 #\= C2` constraint for every edge.
+4.  Uses `labeling/2` to find a valid solution.
 
-edges_au([
-    wa-nt, wa-sa,
-    nt-sa, nt-q,
-    sa-q, sa-nsw, sa-v
-    q-nsw,
-    nsw-v
-]).
+## How to Run
 
-color_names([1-red, 2-green, 3-blue, 4-yellow]).
+1.  **Load the program** in SWI-Prolog:
+    ```prolog
+    ?- [map_color].
+    true.
+    ```
 
-map_color(K, Regions, Edges, Vars) :-
-    length(Regions, N),
-    length(Vars, N),
-    Vars ins 1..K,
-    apply_constraints(Edges, Regions, Vars),
-    labeling([], Vars).
+2.  **Run the solver** for the desired map and number of colors (K).
 
-apply_constraints([], _, _).
-apply_constraints([R1-R2 | Rest], Regions, Vars) :-
-    nth1(Idx1, Regions, R1),
-    nth1(Idx1, Vars, C1),
-    nth1(Idx2, Regions, R2),
-    nth1(Idx2, Vars, C2),
-    C1 #\= C2,
-    apply_constraints(Rest, Regions, Vars)
+## Part A: Australia
+Test queries for the Australian map.
 
-pretty_print(Regions, Vars, ColorMap) :-
-    format('~n Solution: ~n'),
-    pretty_color_by_region(Regions, Vars, ColorMap).
+### Australia with K=3 Colors
+```prolog
+?- solve_au(3).
 
-pretty_color_by_region([], [], _).
-pretty_color_by_region([Region|Rs], [Var|Vs], ColorMap) :-
-    member(Var-ColorName, ColorMap),
-    format('~w = ~w~n' [Region, ColorName]),
-    pretty_color_by_region(Rs, Vs, ColorMap).
+ Solution:
+wa = red
+nt = green
+sa = blue
+q = red
+nsw = green
+v = red
+t = red
+true .
+```
 
-solve_au(K) :-
-    regions_au(Regions),
-    edges_au(Edges),
-    map_color(K, Regions, Edges, Vars),
-    color_names(ColorMap),
-    pretty_print(Regions, Vars, ColorMap).
+### Australia with K=4 Colors
+```prolog
+?- solve_au(4).
 
+ Solution:
+wa = red
+nt = green
+sa = blue
+q = red
+nsw = green
+v = red
+t = red
+true .
+```
 
-% PART B: South America
+## Part B: South America
+Test queries for the South American map.
+
+### South America with K=3 Colors
+The solver proves no solution exists.
+
+```prolog
+?- solve_sa(3).
+false.
+```
+
+### South America with K=4 Colors
+The solver finds a valid 4-coloring.
+
+```prolog
+?- solve_sa(4).
+
+ Solution:
+ar = red
+bo = green
+br = blue
+cl = blue
+co = red
+ec = green
+gfr = red
+gy = red
+py = yellow
+pe = yellow
+su = green
+uy = green
+ve = green
+true .
+```
