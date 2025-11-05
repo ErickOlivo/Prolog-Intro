@@ -56,6 +56,9 @@ Test queries for the South American map.
 
 ### South America with K=3 Colors
 The solver proves no solution exists.
+This map is more complex and cannot be colored with only 3 colors.
+
+
 
 ```prolog
 ?- solve_sa(3).
