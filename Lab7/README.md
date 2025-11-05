@@ -46,3 +46,6 @@ solve_au(K) :-
     map_color(K, Regions, Edges, Vars),
     color_names(ColorMap),
     pretty_print(Regions, Vars, ColorMap).
+
+
+% PART B: South America
